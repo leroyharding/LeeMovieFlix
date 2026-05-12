@@ -1,0 +1,12 @@
+node_modules/
+dist/
+www/
+android/
+ios/
+*.apk
+*.aab
+.DS_Store
+.vscode/
+scratch/
+SESSION_NOTES.md
+code.json

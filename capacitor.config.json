@@ -1,0 +1,8 @@
+{
+  "appId": "com.leemovieflix.app",
+  "appName": "LeeMovieFlix",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "http"
+  }
+}
