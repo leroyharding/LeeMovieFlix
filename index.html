@@ -80,8 +80,12 @@
   .close-btn:focus, .switch-btn:focus { box-shadow: 0 0 0 3px #fff; transform: scale(1.1); }
   
   /* Auto-hide Player Bar */
-  .player-bar { transition: transform 0.3s ease, opacity 0.3s ease; transform: translateY(0); opacity: 1; }
+  .player-bar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease; transform: translateY(0); opacity: 1; }
   .player-bar.hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+  
+  /* Clear Screen Mode */
+  .player-overlay.ui-hidden { cursor: none; }
+  .player-overlay.ui-hidden iframe { pointer-events: none; } /* Prevent accidental clicks while UI is hidden */
 
   /* ─── SEASON/EPISODE SELECTOR ─── */
   .episode-selector { display: flex; align-items: center; gap: 10px; }
@@ -460,7 +464,7 @@
 <!-- ─── HEADER ─── -->
 <div class="header">
   <div class="header-left">
-    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.4.9</span></h1>
+    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.5.0</span></h1>
   </div>
   <div class="header-right">
     <div class="search-box">
@@ -1639,7 +1643,17 @@ async function playItem(item) {
   status.textContent = 'Loading player...';
   overlay.classList.add('active');
   document.body.classList.add('playing'); // Hide header/tabs
+  
+  // Enter Fullscreen Mode
+  try {
+    if (overlay.requestFullscreen) overlay.requestFullscreen();
+    else if (overlay.webkitRequestFullscreen) overlay.webkitRequestFullscreen();
+    else if (overlay.mozRequestFullScreen) overlay.mozRequestFullScreen();
+    else if (overlay.msRequestFullscreen) overlay.msRequestFullscreen();
+  } catch (err) { console.warn("Fullscreen request failed:", err); }
+
   setTimeout(() => document.getElementById('closePlayerBtn').focus(), 100);
+  resetHudTimer(); // Start the stealth timer immediately
 
   // Listen for player events
   window.addEventListener('message', function playerListener(e) {
@@ -1680,15 +1694,19 @@ function resetHudTimer() {
   if (STATE.hudTimeout) clearTimeout(STATE.hudTimeout);
   STATE.hudTimeout = setTimeout(() => {
     const bar = document.querySelector('.player-bar');
+    const overlay = document.getElementById('playerOverlay');
     if (bar && STATE.currentItem) {
       bar.classList.add('hidden');
+      if (overlay) overlay.classList.add('ui-hidden');
     }
-  }, 4000); // Hide after 4 seconds
+  }, 3500); // Hide after 3.5 seconds
 }
 
 function showHud() {
   const bar = document.querySelector('.player-bar');
+  const overlay = document.getElementById('playerOverlay');
   if (bar) bar.classList.remove('hidden');
+  if (overlay) overlay.classList.remove('ui-hidden');
 }
 
 // Global listener to show HUD on remote interaction
@@ -1891,6 +1909,16 @@ function closePlayer() {
   const switchBtn = document.getElementById('switchBtn');
   const reloadBtn = document.getElementById('reloadPlayerBtn');
   const externalControls = document.querySelector('.external-controls');
+
+  // Exit Fullscreen Mode
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+      else if (document.msExitFullscreen) document.msExitFullscreen();
+    }
+  } catch (err) { console.warn("Fullscreen exit failed:", err); }
 
   frame.src = '';
   overlay.classList.remove('active');
