@@ -114,4 +114,4 @@
 > [!NOTE]
 > All features are designed to work within the existing single-file architecture and Android TV/remote navigation constraints. TMDB API provides the data for most of these features at no extra cost.
 
-*Last updated: May 11, 2026 — LeeMovieFlix v1.3.3*
+*Last updated: May 14, 2026 — LeeMovieFlix v1.4.9*

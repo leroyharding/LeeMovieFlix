@@ -329,6 +329,81 @@
   .changelog-dismiss:hover { filter: brightness(1.2); }
   .changelog-dismiss:focus { box-shadow: 0 0 0 3px #fff; outline: none; }
 
+  /* ─── HERO BANNER ─── */
+  .hero-banner { 
+    width: 100%; 
+    height: 70vh; 
+    min-height: 400px; 
+    position: relative; 
+    margin-bottom: 40px; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    background: #0f0f1a;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    display: none;
+    animation: fadeIn 1s ease-out;
+  }
+  .hero-banner.active { display: block; }
+  .hero-bg { 
+    position: absolute; 
+    top: 0; left: 0; width: 100%; height: 100%; 
+    background-size: cover; 
+    background-position: center 20%;
+    transition: opacity 1s ease-in-out;
+  }
+  .hero-bg::after { 
+    content: ''; 
+    position: absolute; 
+    top: 0; left: 0; width: 100%; height: 100%; 
+    background: linear-gradient(0deg, #000 0%, transparent 60%), 
+                linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, transparent 100%); 
+  }
+  .hero-content { 
+    position: absolute; 
+    bottom: 0; left: 0; 
+    padding: 60px; 
+    z-index: 2; 
+    width: 100%; 
+    max-width: 800px;
+  }
+  .hero-title { font-size: clamp(32px, 5vw, 64px); font-weight: 800; margin-bottom: 16px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+  .hero-meta { display: flex; gap: 20px; font-size: 18px; color: #ccc; margin-bottom: 24px; align-items: center; }
+  .hero-desc { font-size: 18px; line-height: 1.6; color: #eee; margin-bottom: 32px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
+  .hero-actions { display: flex; gap: 16px; }
+
+  @media (max-width: 768px) {
+    .hero-banner { height: 60vh; margin-bottom: 20px; border-radius: 0; }
+    .hero-content { padding: 30px; }
+    .hero-title { font-size: 32px; }
+    .hero-desc { font-size: 14px; -webkit-line-clamp: 2; }
+    .hero-meta { font-size: 14px; gap: 12px; }
+  }
+
+  /* ─── AMBIENT SCREENSAVER ─── */
+  .screensaver-overlay { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: #000; z-index: 100000; 
+    display: none; opacity: 0; transition: opacity 2s ease;
+    cursor: none;
+  }
+  .screensaver-overlay.active { display: block; opacity: 1; }
+  .ss-bg { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background-size: cover; background-position: center;
+    filter: brightness(0.6);
+    animation: kenBurns 30s linear infinite alternate;
+  }
+  @keyframes kenBurns { 
+    from { transform: scale(1); } 
+    to { transform: scale(1.2) translate(2%, 2%); } 
+  }
+  .ss-info { 
+    position: absolute; bottom: 60px; left: 60px; z-index: 2; 
+    animation: fadeIn 2s ease;
+  }
+  .ss-title { font-size: 48px; font-weight: 800; margin-bottom: 10px; opacity: 0.8; }
+  .ss-time { font-size: 120px; font-weight: 200; opacity: 0.3; margin-bottom: -20px; }
+
   /* ─── CONTINUE WATCHING ─── */
   .continue-watching-row { margin-bottom: 40px; }
   .progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.2); z-index: 5; }
@@ -362,12 +437,12 @@
 <div class="changelog-overlay" id="changelogOverlay">
   <div class="changelog-box">
     <h2>What's New 🎬</h2>
-    <div class="version-tag">v1.4.8</div>
+    <div class="version-tag">v1.4.9</div>
     <ul>
-      <li><strong>Navigation Restored</strong> — Fixed the missing navigation buttons and restored the sub-filters.</li>
-      <li><strong>Consistent Filters</strong> — Added sub-navigation buttons (Popular, Top Rated, etc.) to all main categories.</li>
-      <li><strong>Layout Fixes</strong> — Improved the grid layout to prevent overlap when "Continue Watching" is active.</li>
-      <li><strong>Tab Persistence</strong> — Navigation sub-states now reset cleanly when switching between main tabs.</li>
+      <li><strong>Hero Banner</strong> — Implemented a cinematic featured movie spotlight on the home page with trending content.</li>
+      <li><strong>Ambient Screensaver</strong> — Added a sophisticated screensaver that activates after 5 minutes of inactivity.</li>
+      <li><strong>Player Branding</strong> — Integrated custom brand-themed player color-coding for a more immersive experience.</li>
+      <li><strong>TV Navigation</strong> — Refined spatial navigation logic for better support on Android TV devices.</li>
     </ul>
     <button class="changelog-dismiss" onclick="dismissChangelog()" autofocus>Got It!</button>
   </div>
@@ -385,7 +460,7 @@
 <!-- ─── HEADER ─── -->
 <div class="header">
   <div class="header-left">
-    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.4.8</span></h1>
+    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.4.9</span></h1>
   </div>
   <div class="header-right">
     <div class="search-box">
@@ -414,6 +489,9 @@
 
 <!-- ─── CONTENT ─── -->
 <div class="content">
+  <!-- Hero Banner -->
+  <div id="heroBanner" class="hero-banner"></div>
+
   <div id="subFilters" class="sub-filters" style="display:none;"></div>
   <div class="grid" id="grid"></div>
   <div class="pagination">
@@ -535,7 +613,7 @@ const PROVIDERS = [
   },
   {
     name: "VidSrc.me",
-    url: (id, s, e) => s ? `https://vidsrc.me/embed/tv?${id.startsWith('tt') ? 'imdb' : 'tmdb'}=${id}&season=${s}&episode=${e}` : `https://vidsrc.me/embed/movie?${id.startsWith('tt') ? 'imdb' : 'tmdb'}=${id}`
+    url: (id, s, e) => s ? `https://vidsrc.me/embed/tv?${id.startsWith('tt') ? 'imdb' : 'tmdb'}=${id}&season=${s}&episode=${e}&color=e50914` : `https://vidsrc.me/embed/movie?${id.startsWith('tt') ? 'imdb' : 'tmdb'}=${id}&color=e50914`
   },
   {
     name: "Embed.su",
@@ -755,10 +833,14 @@ async function loadPage() {
   const loading = document.getElementById('loadingIndicator');
   const subFilters = document.getElementById('subFilters');
   const pagination = document.querySelector('.pagination');
+  const hero = document.getElementById('heroBanner');
   
   loading.style.display = 'block';
   pagination.style.display = 'none';
   grid.innerHTML = ''; // Clean start for all views
+
+  // Render Hero Banner for main views
+  renderHeroBanner();
 
   // Back button for collections
   const existingBack = document.getElementById('collectionBackBtn');
@@ -2328,7 +2410,7 @@ setTimeout(dismissSplash, 3500);
 // ─── CHANGELOG / WHAT'S NEW ──────────────────────────────
 // ═══════════════════════════════════════════════════════════
 
-const APP_VERSION = 'v1.4.8';
+const APP_VERSION = 'v1.4.9';
 
 function showChangelog() {
   document.getElementById('changelogOverlay').classList.add('active');
@@ -2358,6 +2440,127 @@ if (STATE.contentType === 'watchlist') renderWatchlist();
 else if (STATE.contentType === 'history') renderHistory();
 else loadPage();
 
+// ═══════════════════════════════════════════════════════════
+// ─── AMBIENT SCREENSAVER LOGIC ───────────────────────────
+// ═══════════════════════════════════════════════════════════
+let IDLE_TIMER = null;
+const IDLE_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+
+function resetIdleTimer() {
+  if (IDLE_TIMER) clearTimeout(IDLE_TIMER);
+  hideScreensaver();
+  IDLE_TIMER = setTimeout(showScreensaver, IDLE_TIMEOUT);
+}
+
+async function showScreensaver() {
+  if (document.body.classList.contains('playing')) return; 
+  
+  const ss = document.getElementById('screensaverOverlay');
+  const bg = document.getElementById('screensaverBg');
+  const title = document.getElementById('ssTitle');
+  const time = document.getElementById('ssTime');
+  if (!ss) return;
+  
+  const now = new Date();
+  time.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  
+  try {
+    const res = await fetchTmdb(API.tmdbTrendingMovies(1));
+    const data = await res.json();
+    const pick = data.results[Math.floor(Math.random() * data.results.length)];
+    if (pick && pick.backdrop_path) {
+      bg.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${pick.backdrop_path})`;
+      title.textContent = pick.title || pick.name;
+    }
+  } catch (e) { console.error("SS error:", e); }
+
+  ss.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function hideScreensaver() {
+  const ss = document.getElementById('screensaverOverlay');
+  if (ss && ss.classList.contains('active')) {
+    ss.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+}
+
+// ─── HERO BANNER LOGIC ───
+async function renderHeroBanner() {
+  const hero = document.getElementById('heroBanner');
+  if (!hero) return;
+
+  if (STATE.contentType !== 'movies' && STATE.contentType !== 'tv' && STATE.contentType !== 'trending') {
+    hero.classList.remove('active');
+    return;
+  }
+  
+  if (STATE.page !== 1 || STATE.searchQuery || STATE.currentGenre) {
+    hero.classList.remove('active');
+    return;
+  }
+
+  try {
+    const type = STATE.contentType === 'tv' ? 'tv' : 'movie';
+    const res = await fetchTmdb(`https://api.themoviedb.org/3/trending/${type}/day`);
+    const data = await res.json();
+    const item = data.results[0]; 
+    
+    if (!item) return;
+
+    const fullItem = {
+      title: item.title || item.name,
+      year: (item.release_date || item.first_air_date || '').split('-')[0],
+      rating: item.vote_average,
+      poster_url: `https://image.tmdb.org/t/p/w500${item.poster_path}`,
+      tmdb_id: item.id,
+      type: type
+    };
+    const itemJson = JSON.stringify(fullItem).replace(/"/g, '&quot;');
+
+    hero.innerHTML = `
+      <div class="hero-bg" style="background-image: url(https://image.tmdb.org/t/p/original${item.backdrop_path})"></div>
+      <div class="hero-content">
+        <div class="badge" style="margin-bottom:12px; background:var(--accent);">${type.toUpperCase()} SPOTLIGHT</div>
+        <h2 class="hero-title">${item.title || item.name}</h2>
+        <div class="hero-meta">
+          <span style="color:var(--accent); font-weight:bold;">★ ${item.vote_average.toFixed(1)}</span>
+          <span>${fullItem.year}</span>
+          <span>HD / 4K</span>
+        </div>
+        <p class="hero-desc">${item.overview}</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="playItem(${itemJson})" tabindex="0">▶ WATCH NOW</button>
+          <button class="btn-secondary" onclick="showInfo(${itemJson})" tabindex="0">ℹ MORE INFO</button>
+        </div>
+      </div>
+    `;
+    hero.classList.add('active');
+  } catch (e) {
+    console.error("Hero render error:", e);
+    hero.classList.remove('active');
+  }
+}
+
+// ─── INITIALIZATION ───
+window.addEventListener('load', () => {
+  resetIdleTimer();
+  ['mousedown', 'keydown', 'touchstart', 'mousemove'].forEach(evt => {
+    window.addEventListener(evt, resetIdleTimer);
+  });
+});
+
 </script>
+<!-- ─── AMBIENT SCREENSAVER ─── -->
+<div class="screensaver-overlay" id="screensaverOverlay">
+  <div id="screensaverBg" class="ss-bg"></div>
+  <div class="ss-info">
+    <div id="ssTime" class="ss-time">00:00</div>
+    <div id="ssTitle" class="ss-title">Ready to Watch?</div>
+    <div style="color:var(--accent); font-weight:bold; letter-spacing:2px; font-size:14px;">PRESS ANY KEY TO WAKE UP</div>
+  </div>
+</div>
+
 </body>
 </html>
