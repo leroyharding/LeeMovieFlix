@@ -1973,6 +1973,7 @@ function getFocusZone(el) {
   if (!el) return 'unknown';
   if (el.closest('.header')) return 'header';
   if (el.closest('.tabs')) return 'tabs';
+  if (el.closest('.sub-filters')) return 'subfilters';
   if (el.closest('.info-overlay')) return 'info';
   if (el.closest('.player-overlay')) return 'player';
   if (el.closest('.cast-browser')) return 'cast';
@@ -1988,10 +1989,13 @@ function focusFirstTab() {
 }
 
 function focusFirstCard() {
+  const subFilters = document.getElementById('subFilters');
+  if (subFilters && subFilters.style.display !== 'none') {
+    const firstFilter = subFilters.querySelector('.filter-btn');
+    if (firstFilter) { firstFilter.focus(); return true; }
+  }
   const card = document.querySelector('.grid .card');
   if (card) { card.focus(); return true; }
-  const filterBtn = document.querySelector('.sub-filters .filter-btn');
-  if (filterBtn) { filterBtn.focus(); return true; }
   return false;
 }
 
@@ -2038,7 +2042,11 @@ window.addEventListener('keydown', (e) => {
       focusFirstTab();
     } else if (zone === 'tabs') {
       e.preventDefault();
-      focusFirstCard();
+      focusFirstCard(); // This now checks sub-filters first
+    } else if (zone === 'subfilters') {
+      e.preventDefault();
+      const firstCard = document.querySelector('.grid .card');
+      if (firstCard) firstCard.focus();
     }
   }
 
@@ -2047,10 +2055,18 @@ window.addEventListener('keydown', (e) => {
     if (zone === 'content') {
       const cards = Array.from(document.querySelectorAll('.grid .card'));
       const idx = cards.indexOf(active);
-      if (idx >= 0 && idx < 8 || active?.closest('.sub-filters') || active?.closest('.pagination')) {
+      if (idx >= 0 && idx < 8 || active?.closest('.pagination')) {
         e.preventDefault();
+        const subFilters = document.getElementById('subFilters');
+        if (subFilters && subFilters.style.display !== 'none') {
+          const activeFilter = subFilters.querySelector('.filter-btn.active') || subFilters.querySelector('.filter-btn');
+          if (activeFilter) { activeFilter.focus(); return; }
+        }
         focusFirstTab();
       }
+    } else if (zone === 'subfilters') {
+      e.preventDefault();
+      focusFirstTab();
     } else if (zone === 'tabs') {
       e.preventDefault();
       focusHeaderElement();
@@ -2067,8 +2083,17 @@ window.addEventListener('keydown', (e) => {
         if (nextIdx >= 0 && nextIdx < tabs.length) {
           e.preventDefault();
           tabs[nextIdx].focus();
-          // Ensure it's scrolled into view if container overflows
           tabs[nextIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+    } else if (zone === 'subfilters') {
+      const filters = Array.from(document.querySelectorAll('.sub-filters .filter-btn'));
+      const currentIdx = filters.indexOf(active);
+      if (currentIdx >= 0) {
+        let nextIdx = (key === 'ArrowRight' || e.keyCode === 39) ? currentIdx + 1 : currentIdx - 1;
+        if (nextIdx >= 0 && nextIdx < filters.length) {
+          e.preventDefault();
+          filters[nextIdx].focus();
         }
       }
     }
