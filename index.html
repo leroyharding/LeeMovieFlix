@@ -42,15 +42,15 @@
 
   /* ─── GRID ─── */
   .content { padding: 32px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px; }
   .card { cursor: pointer; border-radius: 12px; overflow: hidden; background: #1a1a2e; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); outline: none; position: relative; border: 1px solid rgba(255,255,255,0.05); }
   .card:hover, .card:focus { transform: scale(1.08); box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 0 4px var(--accent, #e50914); z-index: 10; border-color: transparent; }
   .card:focus .card-info h3 { color: #fff; }
   .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #0f0f1a; transition: opacity 0.5s ease; }
   .card img[src*="placehold.co"] { opacity: 0.6; }
-  .card-info { padding: 12px; }
-  .card-info h3 { font-size: 14px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-info .meta { display: flex; justify-content: space-between; font-size: 12px; color: #888; }
+  .card-info { padding: 8px 10px; }
+  .card-info h3 { font-size: 13px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-info .meta { display: flex; justify-content: space-between; font-size: 11px; color: #888; }
   .card-info .rating { color: #f5c518; }
   .card-info .badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; background: var(--accent, #e50914); color: #fff; }
 
@@ -156,8 +156,8 @@
   .trending-section h2 { font-size: 20px; margin-bottom: 16px; color: var(--accent, #e50914); border-left: 4px solid var(--accent, #e50914); padding-left: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
   .horizontal-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 10px 0; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
   .horizontal-scroll::-webkit-scrollbar { display: none; }
-  .horizontal-scroll .card { width: 160px; flex: 0 0 auto; margin: 0; }
-  .horizontal-scroll .card img { height: 240px; object-fit: cover; }
+  .horizontal-scroll .card { width: 130px; flex: 0 0 auto; margin: 0; }
+  .horizontal-scroll .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
   @media (max-width: 768px) {
     .horizontal-scroll { gap: 12px; }
     .horizontal-scroll .card { min-width: 130px; }
@@ -292,14 +292,14 @@
   .cast-person-info img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
   .cast-person-info .cast-name { font-size: 28px; font-weight: 700; }
   .cast-person-info .cast-role { font-size: 14px; color: #888; margin-top: 4px; }
-  .cast-filmography { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+  .cast-filmography { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px; }
 
   /* ─── SIMILAR MOVIES ROW ─── */
   .similar-section { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; }
   .similar-section h3 { font-size: 18px; color: var(--accent); margin-bottom: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
   .similar-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; }
   .similar-row::-webkit-scrollbar { display: none; }
-  .similar-card { min-width: 120px; flex: 0 0 auto; cursor: pointer; border-radius: 8px; overflow: hidden; background: #1a1a2e; transition: transform 0.2s, box-shadow 0.2s; }
+  .similar-card { min-width: 110px; flex: 0 0 auto; cursor: pointer; border-radius: 8px; overflow: hidden; background: #1a1a2e; transition: transform 0.2s, box-shadow 0.2s; }
   .similar-card:hover, .similar-card:focus { transform: scale(1.08); box-shadow: 0 4px 16px rgba(0,0,0,0.6); outline: none; }
   .similar-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
   .similar-card-title { padding: 6px 8px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #ccc; }
@@ -406,6 +406,7 @@
   .progress-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.2); z-index: 5; }
   .progress-bar-fill { height: 100%; background: var(--accent); transition: width 0.3s ease; }
   .resume-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 5; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
+  .watchlist-badge { position: absolute; top: 10px; left: 10px; background: var(--accent); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 5; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
 </style>
 </head>
@@ -434,12 +435,12 @@
 <div class="changelog-overlay" id="changelogOverlay">
   <div class="changelog-box">
     <h2>What's New 🎬</h2>
-    <div class="version-tag">v1.4.9</div>
+    <div class="version-tag">v1.6.2</div>
     <ul>
-      <li><strong>Hero Banner</strong> — Implemented a cinematic featured movie spotlight on the home page with trending content.</li>
-      <li><strong>Ambient Screensaver</strong> — Added a sophisticated screensaver that activates after 5 minutes of inactivity.</li>
-      <li><strong>Player Branding</strong> — Integrated custom brand-themed player color-coding for a more immersive experience.</li>
-      <li><strong>TV Navigation</strong> — Refined spatial navigation logic for better support on Android TV devices.</li>
+      <li><strong>Watchlist Stability</strong> — Fixed a major issue where movie posters appeared way too big on the watchlist and history pages.</li>
+      <li><strong>Grid Layout Optimization</strong> — Reduced poster sizes across the entire app for a cleaner, more professional look with higher information density.</li>
+      <li><strong>Improved Watchlist Logic</strong> — Enhanced item matching and added visual "★" indicators for saved movies.</li>
+      <li><strong>Horizontal Rows</strong> — Standardized scrolling row card widths and image scaling.</li>
     </ul>
     <button class="changelog-dismiss" onclick="dismissChangelog()" autofocus>Got It!</button>
   </div>
@@ -1069,7 +1070,7 @@ async function loadPage() {
         grid.innerHTML += `
           <div class="trending-section">
             <h2>${sectionTitle}</h2>
-            <div class="grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px;">
+            <div class="grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px;">
               ${itemsHtml}
             </div>
           </div>
@@ -1101,7 +1102,7 @@ function addToHistory(item, season = null, episode = null) {
   const id = item.imdb_id || item.tmdb_id;
   
   // Remove existing entry for this item
-  STATE.history = STATE.history.filter(i => (i.imdb_id || i.tmdb_id) !== id);
+  STATE.history = STATE.history.filter(i => !isSameItem(i, item));
   
   // Add to start of list
   STATE.history.unshift(historyItem);
@@ -1115,6 +1116,7 @@ function addToHistory(item, season = null, episode = null) {
 
 function renderHistory() {
   const grid = document.getElementById('grid');
+  grid.style.display = 'grid'; // Ensure grid layout
   document.querySelector('.pagination').style.display = 'none';
   
   if (STATE.history.length === 0) {
@@ -1129,9 +1131,20 @@ function renderHistory() {
 
 
 // ─── WATCHLIST LOGIC ───
+function isSameItem(itemA, itemB) {
+  if (!itemA || !itemB) return false;
+  // Standardize IDs to strings for comparison
+  const idA = { tmdb: itemA.tmdb_id?.toString(), imdb: itemA.imdb_id?.toString() };
+  const idB = { tmdb: itemB.tmdb_id?.toString(), imdb: itemB.imdb_id?.toString() };
+  
+  if (idA.tmdb && idB.tmdb && idA.tmdb === idB.tmdb) return true;
+  if (idA.imdb && idB.imdb && idA.imdb === idB.imdb) return true;
+  return false;
+}
+
 function toggleWatchlist(e, item) {
-  e.stopPropagation();
-  const index = STATE.watchlist.findIndex(i => (i.imdb_id || i.tmdb_id) === (item.imdb_id || item.tmdb_id));
+  if (e) e.stopPropagation();
+  const index = STATE.watchlist.findIndex(i => isSameItem(i, item));
   if (index > -1) {
     STATE.watchlist.splice(index, 1);
   } else {
@@ -1139,12 +1152,22 @@ function toggleWatchlist(e, item) {
   }
   localStorage.setItem('lmf_watchlist', JSON.stringify(STATE.watchlist));
   
-  if (STATE.contentType === 'watchlist') renderWatchlist();
-  else loadPage(); // Re-render to update badges
+  // Update UI components
+  updateInfoWatchlistBtn(item);
+  
+  if (STATE.contentType === 'watchlist') {
+    renderWatchlist();
+  } else {
+    // If we're on a grid, we might want to refresh to show/hide badges, 
+    // but loadPage is expensive (re-fetches API). 
+    // For now, let's just refresh if it's simple or just let the user see the update in the modal.
+    // loadPage(); 
+  }
 }
 
 function renderWatchlist() {
   const grid = document.getElementById('grid');
+  grid.style.display = 'grid'; // Ensure grid layout
   document.querySelector('.pagination').style.display = 'none';
   
   if (STATE.watchlist.length === 0) {
@@ -1157,10 +1180,10 @@ function renderWatchlist() {
 
 function renderCard(item) {
   const isTv = item.type === 'tv';
-  const inWatchlist = STATE.watchlist.some(i => (i.imdb_id || i.tmdb_id) === (item.imdb_id || item.tmdb_id));
+  const inWatchlist = STATE.watchlist.some(i => isSameItem(i, item));
   
   // Progress Logic
-  const cwItem = STATE.continueWatching.find(i => (i.imdb_id || i.tmdb_id) === (item.imdb_id || item.tmdb_id));
+  const cwItem = STATE.continueWatching.find(i => isSameItem(i, item));
   const progress = cwItem ? cwItem.progress : 0;
   const progressHtml = progress > 0 ? `<div class="progress-container"><div class="progress-bar-fill" style="width:${progress}%"></div></div>` : '';
   
@@ -1177,6 +1200,7 @@ function renderCard(item) {
   return `
     <div class="card" onclick="showInfo(${itemJson})" tabindex="0" onkeydown="if(event.key==='Enter')showInfo(${itemJson})">
       ${resumeBadge}
+      ${inWatchlist ? '<div class="watchlist-badge">★</div>' : ''}
       <img src="${item.poster_url || placeholder}"
            alt="${item.title}" loading="lazy"
            onerror="this.src='${placeholder}'">
@@ -1238,8 +1262,12 @@ async function showInfo(item) {
       : 'N/A';
     const genres = data.genres?.map(g => g.name).join(', ') || 'N/A';
     const runtime = data.runtime ? `${data.runtime} min` : (data.episode_run_time && data.episode_run_time.length > 0 ? `${data.episode_run_time[0]} min` : '');
+    // Update item with any missing IDs from fetched details to ensure better matching
+    if (data.imdb_id && !item.imdb_id) item.imdb_id = data.imdb_id;
+    if (data.id && !item.tmdb_id) item.tmdb_id = data.id;
+
     const itemJson = JSON.stringify(item).replace(/'/g, "\\'").replace(/"/g, "&quot;");
-    const inWatchlist = STATE.watchlist.some(i => (i.imdb_id || i.tmdb_id) === (item.imdb_id || item.tmdb_id));
+    const inWatchlist = STATE.watchlist.some(i => isSameItem(i, item));
 
     // Content Rating
     let contentRating = '';
@@ -1278,7 +1306,7 @@ async function showInfo(item) {
               <span style="font-size:24px;">▶</span> WATCH NOW
             </button>
 
-            <button class="btn-secondary" id="infoWatchlistBtn" onclick="toggleWatchlist(event, ${itemJson}); updateInfoWatchlistBtn(${inWatchlist})">
+            <button class="btn-secondary" id="infoWatchlistBtn" onclick="toggleWatchlist(event, ${itemJson})">
               ${inWatchlist ? '★ REMOVE' : '☆ WATCHLIST'}
             </button>
           </div>
@@ -1345,13 +1373,12 @@ function closeInfo() {
 
 }
 
-function updateInfoWatchlistBtn(currentlyIn) {
+function updateInfoWatchlistBtn(item) {
   const btn = document.getElementById('infoWatchlistBtn');
-  if (!btn) return;
-  // Since toggleWatchlist was just called, the state is now the opposite
-  const newState = !currentlyIn;
-  btn.innerHTML = newState ? '★ REMOVE' : '☆ WATCHLIST';
-  btn.style.color = newState ? 'var(--accent)' : '#fff';
+  if (!btn || !item) return;
+  const isIn = STATE.watchlist.some(i => isSameItem(i, item));
+  btn.innerHTML = isIn ? '★ REMOVE' : '☆ WATCHLIST';
+  btn.style.color = isIn ? 'var(--accent)' : '#fff';
 }
 
 
@@ -1717,7 +1744,7 @@ function updateContinueWatching(item, progress, season = null, episode = null) {
     updated_at: Date.now() 
   };
   
-  STATE.continueWatching = STATE.continueWatching.filter(i => (i.imdb_id || i.tmdb_id) !== id);
+  STATE.continueWatching = STATE.continueWatching.filter(i => !isSameItem(i, item));
   STATE.continueWatching.unshift(cwItem);
   
   // Limit to 10 items
@@ -2267,7 +2294,7 @@ setTimeout(dismissSplash, 3500);
 // ─── CHANGELOG / WHAT'S NEW ──────────────────────────────
 // ═══════════════════════════════════════════════════════════
 
-const APP_VERSION = 'v1.4.9';
+const APP_VERSION = 'v1.6.2';
 
 function showChangelog() {
   document.getElementById('changelogOverlay').classList.add('active');
