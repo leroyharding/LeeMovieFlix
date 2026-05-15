@@ -97,16 +97,9 @@
   .player-frame { flex: 1; position: relative; background: #000; overflow: hidden; }
   .player-frame iframe { width: 100%; height: 100%; border: none; background: #000; }
 
-  /* Trailer Mode Enhancements */
-  .player-overlay.trailer-mode .player-bar { background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); position: absolute; top: 0; left: 0; right: 0; z-index: 10; border: none; }
-  .player-overlay.trailer-mode .player-frame iframe { transform: scale(1.01); } /* Slight scale to hide edge artifacts */
-  .trailer-badge { display: none; background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-right: 10px; }
-  .player-overlay.trailer-mode .trailer-badge { display: inline-block; }
 
-  /* Background Trailer for Info Modal */
-  .info-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0; transition: opacity 1.5s ease; pointer-events: none; overflow: hidden; }
-  .info-bg-video.active { opacity: 0.6; }
-  .info-bg-video iframe { width: 100%; height: 100%; border: none; transform: scale(1.3); /* Fill screen and hide UI */ }
+
+
 
 
   /* ─── PAGINATION ─── */
@@ -464,7 +457,7 @@
 <!-- ─── HEADER ─── -->
 <div class="header">
   <div class="header-left">
-    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.5.1</span></h1>
+    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.6.0</span></h1>
   </div>
   <div class="header-right">
     <div class="search-box">
@@ -482,7 +475,7 @@
   <button class="tab active" data-type="movies" onclick="switchTab('movies')">Movies</button>
   <button class="tab" data-type="tv" onclick="switchTab('tv')">TV Shows</button>
   <button class="tab" data-type="trending" onclick="switchTab('trending')">Trending</button>
-  <button class="tab" data-type="trailers" onclick="switchTab('trailers')">Trailers</button>
+
   <button class="tab" data-type="watchlist" onclick="switchTab('watchlist')">Watchlist</button>
   <button class="tab" data-type="collections" onclick="switchTab('collections')">Collections</button>
   <button class="tab" data-type="history" onclick="switchTab('history')">History</button>
@@ -505,14 +498,14 @@
   </div>
   <footer style="margin-top: 80px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; color: #555; font-size: 13px; letter-spacing: 1px;">
     <p>© 2026 LeeMovieFlix · Designed & Developed by <span style="color: var(--accent); font-weight: bold; text-transform: uppercase;">TheTechGuy</span></p>
-    <p style="margin-top: 12px; font-size: 11px; opacity: 0.5;">Premium Cinematic Experience v1.5.1 · All Rights Reserved</p>
+    <p style="margin-top: 12px; font-size: 11px; opacity: 0.5;">Premium Cinematic Experience v1.6.0 · All Rights Reserved</p>
   </footer>
   <div id="loadingIndicator" class="loading" style="display:none;">Loading...</div>
 </div>
 
 <!-- ─── INFO OVERLAY ─── -->
 <div class="info-overlay" id="infoOverlay">
-  <div id="infoBgVideo" class="info-bg-video"></div>
+
   <div id="infoContainer" style="width:100%; height:100%;"></div>
 </div>
 
@@ -522,7 +515,7 @@
   <div class="player-bar">
     <div class="player-bar-left">
       <button id="closePlayerBtn" class="close-btn" onclick="closePlayer()">Close</button>
-      <div class="trailer-badge">Trailer</div>
+
       <button id="switchBtn" class="switch-btn" onclick="switchServer()">Switch Server</button>
       <h2 id="playerTitle"></h2>
       <div id="playerStatus" class="player-status"></div>
@@ -532,8 +525,7 @@
         <label>Episode</label>
         <select id="episodeSelect" onchange="onEpisodeChange()"></select>
       </div>
-      <button id="trailerFixBtn" class="switch-btn" onclick="toggleTrailerSource()" style="display:none; background:#444; margin-left: 10px; border:1px solid #666;">Try Another Player</button>
-      <button id="trailerExternalBtn" class="switch-btn" onclick="openTrailerExternal()" style="display:none; background:#ff0000; margin-left: 10px; font-weight:bold;">Open in YouTube App</button>
+
       <button id="reloadPlayerBtn" class="switch-btn" onclick="reloadPlayer()" style="background:#222; margin-left: 10px;">↻ Reload</button>
 
     </div>
@@ -596,10 +588,6 @@ const STATE = {
   currentProvider: 0,
   trendingType: 'all', // 'all', 'movie', 'tv'
   currentCollection: null, // Current active collection
-  trailerMode: false,
-  bgTrailerTimeout: null,
-  currentTrailerSite: 'YouTube',
-  trailerPlayerMode: 0, // 0: youtube, 1: nocookie, 2: invidious (fallback)
   continueWatching: JSON.parse(localStorage.getItem('lmf_continue') || '[]'),
   playbackStartTime: null,
   subType: 'popular' // For sub-navigation within Movies/TV/Trending
@@ -652,8 +640,7 @@ const API = {
   tmdbSeasonEpisodes: (tmdbId, season) =>
     `https://api.themoviedb.org/3/tv/${tmdbId}/season/${season}?api_key=${CURRENT_TMDB_KEY}&language=en-US`,
 
-  tmdbTrailers: (type, id) =>
-    `https://api.themoviedb.org/3/${type === 'tv' ? 'tv' : 'movie'}/${id}/videos?api_key=${CURRENT_TMDB_KEY}`,
+
 
   tmdbDiscover: (type, genreId, page) =>
     `https://api.themoviedb.org/3/discover/${type === 'tv' ? 'tv' : 'movie'}?api_key=${CURRENT_TMDB_KEY}&with_genres=${genreId}&page=${page}&language=en-US&sort_by=popularity.desc`,
@@ -904,7 +891,7 @@ async function loadPage() {
         { title: 'Trending Movies', data: results[0].results, type: 'movie' },
         { title: 'Trending TV Shows', data: results[1].results, type: 'tv' },
         { title: 'Top Rated Today', data: results[2].results, type: null },
-        { title: 'Latest Trailers & Upcoming', data: results[3].results, type: 'movie' }
+        { title: 'Upcoming Movies', data: results[3].results, type: 'movie' }
       ];
 
       grid.innerHTML = categories.map(cat => `
@@ -1015,9 +1002,7 @@ async function loadPage() {
     } else if (STATE.currentGenre) {
       url = API.tmdbDiscover(STATE.contentType, STATE.currentGenre, STATE.page);
       isTmdb = true;
-    } else if (STATE.contentType === 'trailers') {
-      url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${CURRENT_TMDB_KEY}&page=${STATE.page}`;
-      isTmdb = true;
+
     } else {
       // Main Movies/TV Tab
       if (STATE.subType === 'popular' && !STATE.searchQuery && !STATE.currentGenre) {
@@ -1140,149 +1125,7 @@ function renderHistory() {
   grid.innerHTML = STATE.history.map(item => renderCard(item, true)).join('');
 }
 
-// ─── TRAILER LOGIC ───
-async function playTrailer(e, item) {
-  if (e) e.stopPropagation();
-  const overlay = document.getElementById('playerOverlay');
-  const frame = document.getElementById('playerFrame');
-  const title = document.getElementById('playerTitle');
-  const status = document.getElementById('playerStatus');
-  const epSelector = document.getElementById('episodeSelector');
-  const switchBtn = document.getElementById('switchBtn');
-  const reloadBtn = document.getElementById('reloadPlayerBtn');
-  const externalControls = document.querySelector('.external-controls');
 
-  // Set context so we know where to return
-  STATE.trailerMode = true;
-  STATE.wasInfoOpen = document.getElementById('infoOverlay').classList.contains('active');
-
-  title.textContent = `Trailer: ${item.title}`;
-  status.textContent = 'Searching for trailer...';
-  
-  // Hide irrelevant controls for trailers
-  epSelector.style.display = 'none';
-  switchBtn.style.display = 'none';
-  reloadBtn.style.display = 'none';
-  if (externalControls) externalControls.style.display = 'none';
-
-    overlay.classList.add('active');
-    overlay.classList.add('trailer-mode');
-    document.body.classList.add('playing');
-
-    try {
-      let id = item.tmdb_id || item.imdb_id;
-      let type = item.type || (STATE.contentType === 'tv' ? 'tv' : 'movie');
-
-      // Stop any background trailer in info modal
-      if (STATE.bgTrailerTimeout) clearTimeout(STATE.bgTrailerTimeout);
-      const bgVid = document.getElementById('infoBgVideo');
-      if (bgVid) {
-        bgVid.innerHTML = '';
-        bgVid.classList.remove('active');
-      }
-
-      // RESOLVE IMDB ID TO TMDB ID (Crucial for items with only IMDb IDs)
-      if (id && id.toString().startsWith('tt')) {
-        status.textContent = 'Resolving IMDb ID...';
-        const findRes = await fetchTmdb(`https://api.themoviedb.org/3/find/${id}?external_source=imdb_id&language=en-US`);
-        const findData = await findRes.json();
-        const match = (findData.movie_results?.[0]) || (findData.tv_results?.[0]);
-        if (match) {
-          id = match.id;
-          type = findData.movie_results?.[0] ? 'movie' : 'tv';
-        }
-      }
-
-      const res = await fetchTmdb(API.tmdbTrailers(type, id));
-      const data = await res.json();
-      
-      // Save for reload
-      STATE.currentItem = item;
-      STATE.currentItem.type = type;
-      STATE.currentItem.id = id;
-
-    
-    // Support YouTube and Vimeo
-    let trailer = data.results?.find(v => v.type === 'Trailer' && (v.site === 'YouTube' || v.site === 'Vimeo'));
-    if (!trailer) trailer = data.results?.find(v => v.type === 'Teaser' && (v.site === 'YouTube' || v.site === 'Vimeo'));
-    if (!trailer) trailer = data.results?.find(v => v.site === 'YouTube' || v.site === 'Vimeo');
-    
-    if (trailer) {
-      STATE.currentTrailerKey = trailer.key;
-      STATE.currentTrailerSite = trailer.site;
-      STATE.trailerPlayerMode = 0; // Reset to default mode
-      
-      // Update HUD
-      document.getElementById('trailerFixBtn').style.display = 'inline-block';
-      document.getElementById('trailerExternalBtn').style.display = (trailer.site === 'YouTube') ? 'inline-block' : 'none';
-      document.getElementById('closePlayerBtn').textContent = 'BACK TO APP';
-      
-      status.textContent = 'Preparing Trailer...';
-      setTrailerSource();
-      
-      setTimeout(() => document.getElementById('closePlayerBtn').focus(), 100);
-    } else {
-      status.textContent = 'No trailer found.';
-      frame.src = '';
-      alert("Sorry, no trailer available for this title.");
-      closePlayer();
-    }
-  } catch (err) {
-    console.error("Trailer error:", err);
-    status.textContent = 'Error loading trailer.';
-  }
-}
-
-function setTrailerSource() {
-  const frame = document.getElementById('playerFrame');
-  const status = document.getElementById('playerStatus');
-  const key = STATE.currentTrailerKey;
-  const site = STATE.currentTrailerSite;
-  const mode = STATE.trailerPlayerMode;
-  const isFile = window.location.protocol === 'file:';
-  
-  if (site === 'Vimeo') {
-    frame.src = `https://player.vimeo.com/video/${key}?autoplay=1`;
-    status.textContent = 'Playing Vimeo Trailer';
-    document.getElementById('trailerFixBtn').style.display = 'none';
-    document.getElementById('trailerExternalBtn').style.display = 'none';
-    return;
-  }
-
-  // YouTube modes
-  let baseUrl = "https://www.youtube.com/embed/";
-  let params = "?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3";
-  
-  if (mode === 1) {
-    baseUrl = "https://www.youtube-nocookie.com/embed/";
-    status.textContent = 'Mode: Privacy Player';
-  } else if (mode === 2) {
-    // Invidious fallback (Mirror)
-    baseUrl = "https://yewtu.be/embed/";
-    status.textContent = 'Mode: Alternative Mirror';
-  } else {
-    status.textContent = 'Mode: Standard Player';
-  }
-
-  if (!isFile && mode !== 2) {
-    params += `&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
-  }
-  
-  frame.src = `${baseUrl}${key}${params}`;
-}
-
-function toggleTrailerSource() {
-  STATE.trailerPlayerMode = (STATE.trailerPlayerMode + 1) % 3;
-  setTrailerSource();
-}
-
-function openTrailerExternal() {
-  if (STATE.currentTrailerKey && STATE.currentTrailerSite === 'YouTube') {
-    const url = `https://www.youtube.com/watch?v=${STATE.currentTrailerKey}`;
-    // In Capacitor, window.open with _system opens the native browser or YouTube app
-    window.open(url, '_system');
-  }
-}
 
 
 // ─── WATCHLIST LOGIC ───
@@ -1434,7 +1277,7 @@ async function showInfo(item) {
             <button class="btn-primary" id="infoPlayBtn" onclick="closeInfo(); playItem(${itemJson})">
               <span style="font-size:24px;">▶</span> WATCH NOW
             </button>
-            <button class="btn-secondary" onclick="playTrailer(event, ${itemJson})">▶ FULL TRAILER</button>
+
             <button class="btn-secondary" id="infoWatchlistBtn" onclick="toggleWatchlist(event, ${itemJson}); updateInfoWatchlistBtn(${inWatchlist})">
               ${inWatchlist ? '★ REMOVE' : '☆ WATCHLIST'}
             </button>
@@ -1472,23 +1315,7 @@ async function showInfo(item) {
       }).join('');
     }
 
-    // Background Trailer Logic: Fetch and play preview after delay
-    const trailers = data.videos?.results || [];
-    const trailer = trailers.find(v => v.type === 'Trailer' && v.site === 'YouTube') || trailers.find(v => v.site === 'YouTube');
-    
-    if (trailer) {
-      if (STATE.bgTrailerTimeout) clearTimeout(STATE.bgTrailerTimeout);
-      STATE.bgTrailerTimeout = setTimeout(() => {
-        const bgVid = document.getElementById('infoBgVideo');
-        if (bgVid && overlay.classList.contains('active') && !document.getElementById('playerOverlay').classList.contains('active')) {
-          const isFile = window.location.protocol === 'file:';
-          const originParam = isFile ? '' : `&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
-          
-          bgVid.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailer.key}&rel=0&modestbranding=1${originParam}" allow="autoplay"></iframe>`;
-          bgVid.classList.add('active');
-        }
-      }, 2500); // Start after 2.5 seconds of browsing details
-    }
+
 
     
     // Auto-focus Play button for TV
@@ -1515,12 +1342,7 @@ function closeInfo() {
   document.getElementById('infoOverlay').classList.remove('active');
   document.body.classList.remove('playing'); 
   
-  if (STATE.bgTrailerTimeout) clearTimeout(STATE.bgTrailerTimeout);
-  const bgVid = document.getElementById('infoBgVideo');
-  if (bgVid) {
-    bgVid.innerHTML = '';
-    bgVid.classList.remove('active');
-  }
+
 }
 
 function updateInfoWatchlistBtn(currentlyIn) {
@@ -1851,9 +1673,7 @@ function reloadPlayer() {
   document.getElementById('playerLoading').style.display = 'flex';
   
   setTimeout(() => {
-    if (STATE.trailerMode && STATE.currentTrailerKey) {
-      setTrailerSource();
-    } else {
+
       const id = item.id || item.tmdb_id || item.imdb_id;
       const s = STATE.currentSeason;
       const e = STATE.currentEpisode;
@@ -1861,7 +1681,6 @@ function reloadPlayer() {
       frame.src = url;
       status.textContent = `● Reloading ${PROVIDERS[STATE.currentProvider].name}...`;
       startProgressTracking(item, item.type === 'tv' ? s : null, item.type === 'tv' ? e : null);
-    }
     resetHudTimer();
   }, 100);
 }
@@ -1933,8 +1752,7 @@ function closePlayer() {
 
   frame.src = '';
   overlay.classList.remove('active');
-  overlay.classList.remove('trailer-mode');
-  STATE.trailerMode = false;
+
   document.getElementById('closePlayerBtn').textContent = 'Close';
   
   // If we weren't in an info screen, show the header/tabs again
@@ -1949,7 +1767,7 @@ function closePlayer() {
 
   STATE.currentItem = null;
   STATE.currentShow = null;
-  STATE.trailerMode = false;
+
   
   // Return focus to info play button if it was open
   if (STATE.wasInfoOpen) {
@@ -2054,7 +1872,7 @@ function switchTab(type) {
     renderWatchlist();
   } else if (type === 'history') {
     renderHistory();
-  } else if (type === 'trending' || type === 'trailers') {
+  } else if (type === 'trending') {
     genreSel.style.display = 'none';
     loadPage();
   } else if (type === 'collections') {
