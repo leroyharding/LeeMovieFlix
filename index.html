@@ -1339,22 +1339,7 @@ function renderCard(item) {
            onerror="this.src='${placeholder}'">
       ${progressHtml}
       <div class="card-info">
-        <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">
-          <h3 style="flex:1;">${item.title}</h3>
-          <div style="display:flex;gap:4px;">
-            <button onclick="event.stopPropagation(); playTrailer(null, ${itemJson})" tabindex="0" onkeydown="if(event.key==='Enter'){event.stopPropagation();playTrailer(null, ${itemJson})}"
-                    style="background:transparent;border:none;color:#888;cursor:pointer;font-size:16px;" 
-                    title="Play Trailer">▶️</button>
-            <button onclick="event.stopPropagation(); showInfo(${itemJson})" tabindex="0" onkeydown="if(event.key==='Enter'){event.stopPropagation();showInfo(${itemJson})}"
-                    style="background:transparent;border:none;color:#888;cursor:pointer;font-size:16px;" 
-                    title="More Info">ℹ️</button>
-            <button onclick="toggleWatchlist(event, ${itemJson})" tabindex="0" onkeydown="if(event.key==='Enter')toggleWatchlist(event, ${itemJson})"
-                    style="background:transparent;border:none;color:${inWatchlist ? 'var(--accent)' : '#888'};cursor:pointer;font-size:18px;" 
-                    title="${inWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist'}">
-              ${inWatchlist ? '★' : '☆'}
-            </button>
-          </div>
-        </div>
+        <h3>${item.title}</h3>
         ${resumeInfo}
         <div class="meta">
           <span>${item.year || ''}</span>
