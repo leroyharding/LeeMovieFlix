@@ -39,7 +39,7 @@
   } 
 
   @media (max-width: 768px) { body { padding: 0; } }
-  body.playing { padding: 0; background: transparent !important; }
+  html.playing, body.playing { padding: 0; background: transparent !important; }
   body.playing .header, body.playing .tabs { display: none !important; }
 
   /* ─── SCROLLBAR ─── */
@@ -1649,6 +1649,7 @@ async function showInfo(item) {
 
 function closeInfo() {
   document.getElementById('infoOverlay').classList.remove('active');
+  document.documentElement.classList.remove('playing');
   document.body.classList.remove('playing'); 
   
 
@@ -1756,6 +1757,7 @@ async function playItem(item) {
 
   status.textContent = 'Loading player...';
   overlay.classList.add('active');
+  document.documentElement.classList.add('playing');
   document.body.classList.add('playing'); // Hide header/tabs
   
   // Enter Fullscreen Mode
@@ -2063,6 +2065,7 @@ function closePlayer() {
 
   document.getElementById('closePlayerBtn').textContent = 'Close';
   
+  document.documentElement.classList.remove('playing');
   document.body.classList.remove('playing');
 
   // Restore UI elements for next time

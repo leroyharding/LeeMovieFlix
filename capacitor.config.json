@@ -4,5 +4,6 @@
   "webDir": "www",
   "server": {
     "androidScheme": "http"
-  }
+  },
+  "backgroundColor": "#00000000"
 }
