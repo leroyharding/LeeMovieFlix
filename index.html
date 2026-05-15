@@ -17,7 +17,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Outfit', sans-serif; background: #000; color: #fff; padding: 20px 40px; overflow-x: hidden; } 
   @media (max-width: 768px) { body { padding: 10px; } }
-  body.playing { padding: 0; }
+  body.playing { padding: 0; background: transparent !important; }
   body.playing .header, body.playing .tabs { display: none; }
 
   /* ─── HEADER ─── */
@@ -69,7 +69,7 @@
   :focus { outline: none; }
 
   /* ─── PLAYER OVERLAY ─── */
-  .player-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999; flex-direction: column; }
+  .player-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: transparent; z-index: 9999; flex-direction: column; }
   .player-overlay.active { display: flex; }
   .player-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: #111; flex-wrap: wrap; gap: 8px; }
   .player-bar-left { display: flex; align-items: center; gap: 16px; }
@@ -94,8 +94,8 @@
   .episode-selector label { font-size: 12px; color: #888; }
   .episode-selector select:focus { border-color: #fff; box-shadow: 0 0 0 2px var(--accent); }
 
-  .player-frame { flex: 1; position: relative; background: #000; overflow: hidden; }
-  .player-frame iframe { width: 100%; height: 100%; border: none; background: #000; }
+  .player-frame { flex: 1; position: relative; background: transparent; overflow: hidden; }
+  .player-frame iframe { width: 100%; height: 100%; border: none; background: transparent; }
 
 
 
@@ -435,9 +435,10 @@
 <div class="changelog-overlay" id="changelogOverlay">
   <div class="changelog-box">
     <h2>What's New 🎬</h2>
-    <div class="version-tag">v1.6.3</div>
+    <div class="version-tag">v1.6.4</div>
     <ul>
-      <li><strong>Firestick Display Fix</strong> — Resolved the "white screen" issue on Firestick devices by implementing a dark native theme and transparent WebView background.</li>
+      <li><strong>v1.6.4:</strong> Firestick Transparency Fix (Video visibility)</li>
+      <li><strong>v1.6.3:</strong> Firestick Display Fix (Hardware Overlay) — Resolved the "white screen" issue on Firestick devices by implementing a dark native theme and transparent WebView background.</li>
       <li><strong>Watchlist Stability</strong> — Fixed a major issue where movie posters appeared way too big on the watchlist and history pages.</li>
       <li><strong>Grid Layout Optimization</strong> — Reduced poster sizes across the entire app for a cleaner, more professional look.</li>
       <li><strong>Navigation Overhaul</strong> — Full D-pad support for sub-filters and dynamic tabs.</li>
@@ -458,7 +459,7 @@
 <!-- ─── HEADER ─── -->
 <div class="header">
   <div class="header-left">
-    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.6.3</span></h1>
+    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.6.4</span></h1>
   </div>
   <div class="header-right">
     <div class="search-box">
@@ -498,7 +499,7 @@
   </div>
   <footer style="margin-top: 80px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; color: #555; font-size: 13px; letter-spacing: 1px;">
     <p>© 2026 LeeMovieFlix · Designed & Developed by <span style="color: var(--accent); font-weight: bold; text-transform: uppercase;">TheTechGuy</span></p>
-    <p style="margin-top: 12px; font-size: 11px; opacity: 0.5;">Premium Cinematic Experience v1.6.3 · All Rights Reserved</p>
+    <p style="margin-top:20px; font-size:12px; opacity:0.5;">LeeMovieFlix v1.6.4 • Made for Android TV & Firestick</p>
   </footer>
   <div id="loadingIndicator" class="loading" style="display:none;">Loading...</div>
 </div>
@@ -2327,7 +2328,7 @@ setTimeout(dismissSplash, 3500);
 // ─── CHANGELOG / WHAT'S NEW ──────────────────────────────
 // ═══════════════════════════════════════════════════════════
 
-const APP_VERSION = 'v1.6.3';
+const APP_VERSION = 'v1.6.4';
 
 function showChangelog() {
   document.getElementById('changelogOverlay').classList.add('active');
