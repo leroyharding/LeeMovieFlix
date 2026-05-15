@@ -13,56 +13,254 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --accent: #e50914; }
+  :root { 
+    --accent: #e50914; 
+    --accent-glow: rgba(229, 9, 20, 0.4);
+    --bg-dark: #08080c;
+    --card-bg: #12121e;
+    --text-main: #ffffff;
+    --text-dim: #a0a0a0;
+    --glass: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Outfit', sans-serif; background: #000; color: #fff; padding: 20px 40px; overflow-x: hidden; } 
-  @media (max-width: 768px) { body { padding: 10px; } }
+  
+  body { 
+    font-family: 'Outfit', sans-serif; 
+    background: var(--bg-dark); 
+    background-image: 
+      radial-gradient(circle at 0% 0%, rgba(229, 9, 20, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, rgba(30, 30, 60, 0.1) 0%, transparent 50%);
+    color: var(--text-main); 
+    padding: 0; 
+    overflow-x: hidden;
+    min-height: 100vh;
+  } 
+
+  @media (max-width: 768px) { body { padding: 0; } }
   body.playing { padding: 0; background: transparent !important; }
-  body.playing .header, body.playing .tabs { display: none; }
+  body.playing .header, body.playing .tabs { display: none !important; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
   /* ─── HEADER ─── */
-  .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%); border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 12px; }
-  .header h1 { font-size: 22px; font-weight: 700; }
+  .header { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 20px 40px; 
+    background: linear-gradient(to bottom, rgba(8, 8, 12, 0.95), transparent);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    flex-wrap: wrap; 
+    gap: 12px; 
+  }
+  .header h1 { 
+    font-size: 26px; 
+    font-weight: 800; 
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #fff, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
   .header-left { display: flex; align-items: center; gap: 24px; }
   .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .search-box { display: flex; gap: 8px; }
-  .search-box input { padding: 8px 16px; border-radius: 6px; border: 1px solid #333; background: #222; color: #fff; width: 240px; font-size: 14px; }
-  .search-box input:focus { outline: none; border-color: var(--accent, #e50914); box-shadow: 0 0 0 3px var(--accent); }
-  .search-box button { padding: 8px 20px; border: none; border-radius: 6px; background: var(--accent, #e50914); color: #fff; cursor: pointer; font-weight: 600; outline: none; }
-  .search-box button:focus { box-shadow: 0 0 0 4px #fff; transform: scale(1.05); }
-
+  
+  .search-box { display: flex; gap: 0px; background: rgba(255,255,255,0.05); border-radius: 50px; padding: 4px; border: 1px solid var(--glass-border); transition: all 0.3s; }
+  .search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); background: rgba(255,255,255,0.08); }
+  
+  .search-box input { 
+    padding: 10px 20px; 
+    border-radius: 50px 0 0 50px; 
+    border: none; 
+    background: transparent; 
+    color: #fff; 
+    width: 280px; 
+    font-size: 14px; 
+    font-weight: 500;
+  }
+  .search-box input::placeholder { color: #666; }
+  .search-box input:focus { outline: none; }
+  
+  .search-box button { 
+    padding: 10px 24px; 
+    border: none; 
+    border-radius: 50px; 
+    background: var(--accent); 
+    color: #fff; 
+    cursor: pointer; 
+    font-weight: 700; 
+    outline: none; 
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .search-box button:focus { background: #fff; color: #000; transform: scale(1.05); }
 
   /* ─── TABS ─── */
-  .tabs { display: flex; gap: 0; padding: 0 32px; background: rgba(26, 26, 46, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 1000; align-items: center; }
+  .tabs { 
+    display: flex; 
+    gap: 15px; 
+    padding: 12px 40px; 
+    background: rgba(8, 8, 12, 0.85); 
+    backdrop-filter: blur(30px); 
+    border-bottom: 1px solid rgba(255,255,255,0.05); 
+    overflow-x: auto; 
+    scrollbar-width: none; 
+    position: sticky; 
+    top: 80px; 
+    z-index: 1000; 
+    align-items: center; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab { padding: 12px 24px; cursor: pointer; color: #888; font-weight: 500; border: none; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; background: transparent; font-size: inherit; font-family: inherit; }
-  .tab:hover { color: #fff; }
-  .tab.active { color: var(--accent, #e50914); border-bottom-color: var(--accent, #e50914); }
-  .tab:focus { outline: 2px solid #fff; outline-offset: -2px; background: rgba(255,255,255,0.12); color: #fff; border-bottom-color: #fff; }
+  
+  .tab { 
+    padding: 10px 24px; 
+    cursor: pointer; 
+    color: rgba(255,255,255,0.5); 
+    font-weight: 700; 
+    border-radius: 50px;
+    border: 1px solid transparent; 
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); 
+    white-space: nowrap; 
+    background: transparent; 
+    font-size: 13px; 
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    outline: none;
+    position: relative;
+  }
+  .tab:hover, .tab:focus, .random-pick-btn:focus { 
+    color: #fff; 
+    background: rgba(255,255,255,0.1); 
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--accent-glow);
+    animation: focusPulse 2s infinite;
+  }
+  .tab.active { 
+    color: #fff; 
+    background: var(--accent);
+    box-shadow: 0 0 20px var(--accent-glow);
+    border-color: rgba(255,255,255,0.2);
+  }
+  .tab.active:focus {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 30px #fff;
+  }
+
+  @keyframes focusPulse {
+    0% { box-shadow: 0 0 10px var(--accent-glow); }
+    50% { box-shadow: 0 0 25px var(--accent-glow); }
+    100% { box-shadow: 0 0 10px var(--accent-glow); }
+  }
 
   /* ─── GRID ─── */
-  .content { padding: 32px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 16px; }
-  .card { cursor: pointer; border-radius: 12px; overflow: hidden; background: #1a1a2e; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); outline: none; position: relative; border: 1px solid rgba(255,255,255,0.05); }
-  .card:hover, .card:focus { transform: scale(1.08); box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 0 4px var(--accent, #e50914); z-index: 10; border-color: transparent; }
-  .card:focus .card-info h3 { color: #fff; }
-  .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #0f0f1a; transition: opacity 0.5s ease; }
-  .card img[src*="placehold.co"] { opacity: 0.6; }
-  .card-info { padding: 8px 10px; }
-  .card-info h3 { font-size: 13px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .card-info .meta { display: flex; justify-content: space-between; font-size: 11px; color: #888; }
-  .card-info .rating { color: #f5c518; }
-  .card-info .badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; background: var(--accent, #e50914); color: #fff; }
-
-  /* ─── COLLECTION CARDS ─── */
-  .collection-card { background: #111; border: 1px solid #222; }
-  .collection-card .poster-container { position: relative; overflow: hidden; }
-  .collection-card .poster-container::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 40%); pointer-events: none; }
-  .collection-card:hover .poster-container img { transform: scale(1.1); }
-  .collection-card img { transition: transform 0.5s ease, opacity 0.5s ease; }
+  .content { padding: 40px; max-width: 1800px; margin: 0 auto; transition: opacity 0.5s ease; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 24px; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease; }
+  .grid.entering { opacity: 0; transform: translateY(30px); }
   
+  .card { 
+    cursor: pointer; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    background: var(--card-bg); 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    outline: none; 
+    position: relative; 
+    border: 1px solid var(--glass-border); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.8) 100%);
+    z-index: 1;
+    opacity: 0.8;
+  }
+
+  .card:hover, .card:focus { 
+    transform: scale(1.08) translateY(-10px); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 4px var(--accent), 0 0 30px var(--accent-glow); 
+    z-index: 10; 
+    border-color: transparent; 
+  }
+  
+  .card:focus .card-info h3 { color: #fff; }
+  
+  .card img { 
+    width: 100%; 
+    aspect-ratio: 2/3; 
+    object-fit: cover; 
+    display: block; 
+    background: #0f0f1a; 
+    transition: transform 0.6s ease, opacity 0.5s ease; 
+  }
+  
+  .card:hover img, .card:focus img { transform: scale(1.1); }
+  
+  .card-info { 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px; 
+    z-index: 2;
+    transition: transform 0.3s ease;
+  }
+  
+  .card-info h3 { 
+    font-size: 14px; 
+    font-weight: 700;
+    margin-bottom: 6px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  }
+  
+  .card-info .meta { 
+    display: flex; 
+    align-items: center;
+    gap: 8px;
+    font-size: 12px; 
+    color: #ccc; 
+    font-weight: 500;
+  }
+  
+  .card-info .rating { color: #f5c518; display: flex; align-items: center; gap: 4px; }
+  .card-info .rating::before { content: '★'; }
+  
+  .card-info .badge { 
+    font-size: 10px; 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    background: var(--accent); 
+    color: #fff; 
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  @keyframes cardEntrance {
+    from { opacity: 0; transform: translateY(30px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .card { animation: cardEntrance 0.6s cubic-bezier(0.23, 1, 0.32, 1) both; }
+  
+  .fade-in { animation: fadeIn 0.8s ease forwards; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .fade-in { animation: fadeIn 0.4s ease forwards; }
 
   /* TV Navigation Helpers */
   .focusable { outline: none; }
@@ -329,51 +527,129 @@
   /* ─── HERO BANNER ─── */
   .hero-banner { 
     width: 100%; 
-    height: 70vh; 
-    min-height: 400px; 
+    height: 75vh; 
+    min-height: 500px; 
     position: relative; 
-    margin-bottom: 40px; 
-    border-radius: 20px; 
+    margin-bottom: 60px; 
+    border-radius: 24px; 
     overflow: hidden; 
-    background: #0f0f1a;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    background: #000;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     display: none;
-    animation: fadeIn 1s ease-out;
+    border: 1px solid var(--glass-border);
   }
-  .hero-banner.active { display: block; }
+  .hero-banner.active { display: block; animation: heroEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+  
+  @keyframes heroEntrance {
+    from { opacity: 0; transform: scale(1.02); filter: brightness(0.5); }
+    to { opacity: 1; transform: scale(1); filter: brightness(1); }
+  }
+
   .hero-bg { 
     position: absolute; 
     top: 0; left: 0; width: 100%; height: 100%; 
     background-size: cover; 
     background-position: center 20%;
-    transition: opacity 1s ease-in-out;
+    transition: background-image 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.5s ease-in-out;
+    animation: kenBurnsHero 40s linear infinite alternate;
   }
+  
+  @keyframes kenBurnsHero {
+    from { transform: scale(1); }
+    to { transform: scale(1.15) translate(-1%, -1%); }
+  }
+
   .hero-bg::after { 
     content: ''; 
     position: absolute; 
     top: 0; left: 0; width: 100%; height: 100%; 
-    background: linear-gradient(0deg, #000 0%, transparent 60%), 
-                linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, transparent 100%); 
+    background: 
+      linear-gradient(0deg, var(--bg-dark) 5%, transparent 50%), 
+      linear-gradient(90deg, rgba(8, 8, 12, 0.9) 0%, rgba(8, 8, 12, 0.4) 40%, transparent 100%),
+      radial-gradient(circle at 20% 50%, rgba(229, 9, 20, 0.15) 0%, transparent 50%); 
   }
+  
   .hero-content { 
     position: absolute; 
     bottom: 0; left: 0; 
-    padding: 60px; 
+    padding: 80px; 
     z-index: 2; 
     width: 100%; 
-    max-width: 800px;
+    max-width: 900px;
   }
-  .hero-title { font-size: clamp(32px, 5vw, 64px); font-weight: 800; margin-bottom: 16px; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-  .hero-meta { display: flex; gap: 20px; font-size: 18px; color: #ccc; margin-bottom: 24px; align-items: center; }
-  .hero-desc { font-size: 18px; line-height: 1.6; color: #eee; margin-bottom: 32px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-shadow: 0 1px 5px rgba(0,0,0,0.5); }
-  .hero-actions { display: flex; gap: 16px; }
+  
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    box-shadow: 0 4px 15px var(--accent-glow);
+    animation: spotlightGlow 3s ease-in-out infinite;
+  }
+  
+  @keyframes spotlightGlow {
+    0%, 100% { box-shadow: 0 4px 15px var(--accent-glow); transform: scale(1); }
+    50% { box-shadow: 0 4px 30px var(--accent-glow); transform: scale(1.05); }
+  }
 
+  .quality-badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+    backdrop-filter: blur(4px);
+  }
+
+  .hero-title { 
+    font-size: clamp(40px, 6vw, 80px); 
+    font-weight: 900; 
+    margin-bottom: 20px; 
+    line-height: 0.95; 
+    letter-spacing: -2px;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    background: linear-gradient(to right, #fff, #bbb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .hero-meta { display: flex; gap: 24px; font-size: 18px; color: #aaa; margin-bottom: 28px; align-items: center; font-weight: 600; }
+  .hero-meta .rating { color: #f5c518; }
+  
+  .hero-desc { 
+    font-size: 20px; 
+    line-height: 1.6; 
+    color: #ddd; 
+    margin-bottom: 40px; 
+    display: -webkit-box; 
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical; 
+    overflow: hidden; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8); 
+    max-width: 700px;
+  }
+  
+  .hero-actions { display: flex; gap: 20px; }
+  
   @media (max-width: 768px) {
-    .hero-banner { height: 60vh; margin-bottom: 20px; border-radius: 0; }
-    .hero-content { padding: 30px; }
-    .hero-title { font-size: 32px; }
-    .hero-desc { font-size: 14px; -webkit-line-clamp: 2; }
-    .hero-meta { font-size: 14px; gap: 12px; }
+    .hero-banner { height: 65vh; margin-bottom: 30px; border-radius: 0; border: none; }
+    .hero-content { padding: 40px 20px; }
+    .hero-title { font-size: 40px; letter-spacing: -1px; }
+    .hero-desc { font-size: 15px; -webkit-line-clamp: 3; }
+    .hero-meta { font-size: 15px; gap: 12px; }
+    .hero-tag { font-size: 10px; padding: 4px 12px; }
   }
 
   /* ─── AMBIENT SCREENSAVER ─── */
@@ -435,9 +711,9 @@
 <div class="changelog-overlay" id="changelogOverlay">
   <div class="changelog-box">
     <h2>What's New 🎬</h2>
-    <div class="version-tag">v1.6.4</div>
+    <div class="version-tag">v1.6.5</div>
     <ul>
-      <li><strong>v1.6.4:</strong> Firestick Transparency Fix (Video visibility)</li>
+      <li><strong>v1.6.5:</strong> Firestick Transparency Fix (Video visibility)</li>
       <li><strong>v1.6.3:</strong> Firestick Display Fix (Hardware Overlay) — Resolved the "white screen" issue on Firestick devices by implementing a dark native theme and transparent WebView background.</li>
       <li><strong>Watchlist Stability</strong> — Fixed a major issue where movie posters appeared way too big on the watchlist and history pages.</li>
       <li><strong>Grid Layout Optimization</strong> — Reduced poster sizes across the entire app for a cleaner, more professional look.</li>
@@ -459,7 +735,7 @@
 <!-- ─── HEADER ─── -->
 <div class="header">
   <div class="header-left">
-    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.6.4</span></h1>
+    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.6.5</span></h1>
   </div>
   <div class="header-right">
     <div class="search-box">
@@ -499,7 +775,7 @@
   </div>
   <footer style="margin-top: 80px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; color: #555; font-size: 13px; letter-spacing: 1px;">
     <p>© 2026 LeeMovieFlix · Designed & Developed by <span style="color: var(--accent); font-weight: bold; text-transform: uppercase;">TheTechGuy</span></p>
-    <p style="margin-top:20px; font-size:12px; opacity:0.5;">LeeMovieFlix v1.6.4 • Made for Android TV & Firestick</p>
+    <p style="margin-top:20px; font-size:12px; opacity:0.5;">LeeMovieFlix v1.6.5 • Made for Android TV & Firestick</p>
   </footer>
   <div id="loadingIndicator" class="loading" style="display:none;">Loading...</div>
 </div>
@@ -813,6 +1089,42 @@ const COLLECTIONS_DATA = [
   { id: 'classic-noir', title: 'Classic Film Noir', emoji: '🕵️‍♂️', type: 'themed', params: 'with_genres=80&primary_release_date.lte=1960-12-31' },
   { id: 'cyber-thriller', title: 'Cyber & Hacker Hits', emoji: '💻', type: 'themed', params: 'with_keywords=2041|12261|173441' }
 ];
+
+// ─── RENDERING LOGIC ───
+function renderCard(item, isHistory = false) {
+  const title = item.title || item.name;
+  const year = item.year || (item.release_date || item.first_air_date || '').split('-')[0];
+  const rating = item.rating || item.vote_average;
+  const poster = item.poster_url || (item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://placehold.co/300x450/1a1a2e/ffffff?text=No+Poster');
+  const type = item.type || (STATE.contentType === 'tv' ? 'tv' : 'movie');
+  const id = item.tmdb_id || item.id;
+  
+  const itemJson = JSON.stringify({ ...item, type, tmdb_id: id }).replace(/"/g, '&quot;');
+  
+  // Staggered entrance delay for premium feel
+  const delay = (Math.random() * 0.4).toFixed(2);
+  
+  return `
+    <div class="card" tabindex="0" onclick="showInfo(${itemJson})" 
+         onkeydown="if(event.key==='Enter')showInfo(${itemJson})"
+         style="animation-delay: ${delay}s;">
+      <div class="card-poster-wrapper">
+        <img src="${poster}" class="card-poster" loading="lazy" onerror="this.src='https://placehold.co/300x450/1a1a2e/ffffff?text=No+Poster'">
+        <div class="card-overlay">
+          <div class="card-rating">★ ${parseFloat(rating).toFixed(1)}</div>
+          ${isHistory ? `<div class="card-history-badge" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.8); color:var(--accent); padding:4px 10px; border-radius:4px; font-size:10px; font-weight:900; z-index:5; backdrop-filter:blur(10px); border:1px solid var(--accent); box-shadow:0 0 10px var(--accent-glow);">HISTORY</div>` : ''}
+        </div>
+      </div>
+      <div class="card-info">
+        <h3>${title}</h3>
+        <div class="meta">
+          <span>${year}</span>
+          <span class="badge" style="background: ${type === 'tv' ? '#6366f1' : 'var(--accent)'}">${type.toUpperCase()}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
 
 
 // ═══════════════════════════════════════════════════════════
@@ -1171,54 +1483,19 @@ function renderWatchlist() {
   document.querySelector('.pagination').style.display = 'none';
   
   if (STATE.watchlist.length === 0) {
-    grid.innerHTML = '<div class="no-results">Your watchlist is empty.</div>';
+    grid.innerHTML = `
+      <div class="no-results" style="grid-column: 1/-1; padding: 100px 20px;">
+        <div style="font-size: 64px; margin-bottom: 20px;">📂</div>
+        <h2 style="color: #fff; margin-bottom: 10px;">Your list is empty</h2>
+        <p style="color: #888;">Save movies and shows to watch them later.</p>
+        <button class="btn-primary" onclick="switchTab('movies')" style="margin: 20px auto; font-size: 14px; padding: 12px 30px;">DISCOVER CONTENT</button>
+      </div>`;
     return;
   }
-
+  
   grid.innerHTML = STATE.watchlist.map(item => renderCard(item)).join('');
 }
 
-function renderCard(item) {
-  const isTv = item.type === 'tv';
-  const inWatchlist = STATE.watchlist.some(i => isSameItem(i, item));
-  
-  // Progress Logic
-  const cwItem = STATE.continueWatching.find(i => isSameItem(i, item));
-  const progress = cwItem ? cwItem.progress : 0;
-  const progressHtml = progress > 0 ? `<div class="progress-container"><div class="progress-bar-fill" style="width:${progress}%"></div></div>` : '';
-  
-  const resumeBadge = isTv && cwItem?.last_season 
-    ? `<div class="resume-badge">S${cwItem.last_season}:E${cwItem.last_episode}</div>` 
-    : (progress > 0 ? `<div class="resume-badge">${Math.round(progress)}%</div>` : '');
-
-  const itemJson = JSON.stringify(item).replace(/"/g, '&quot;');
-  
-  const resumeInfo = isTv && item.last_season ? `<div style="font-size:10px;color:var(--accent);margin-bottom:4px;">Resume: S${item.last_season} E${item.last_episode}</div>` : '';
-
-  const placeholder = 'https://placehold.co/300x450/1a1a2e/ffffff?text=No+Poster';
-  
-  return `
-    <div class="card" onclick="showInfo(${itemJson})" tabindex="0" onkeydown="if(event.key==='Enter')showInfo(${itemJson})">
-      ${resumeBadge}
-      ${inWatchlist ? '<div class="watchlist-badge">★</div>' : ''}
-      <img src="${item.poster_url || placeholder}"
-           alt="${item.title}" loading="lazy"
-           onerror="this.src='${placeholder}'">
-      ${progressHtml}
-      <div class="card-info">
-        <h3>${item.title}</h3>
-        ${resumeInfo}
-        <div class="meta">
-          <span>${item.year || ''}</span>
-          <span class="rating">★ ${item.rating || '?'}</span>
-        </div>
-        ${isTv ? `<div class="badge" style="background:${STATE.accentColor};margin-top:6px;display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;">TV Series</div>` : ''}
-      </div>
-    </div>
-  `;
-}
-
-// ─── INFO SYSTEM ───
 async function showInfo(item) {
   const overlay = document.getElementById('infoOverlay');
   const container = document.getElementById('infoContainer');
@@ -1226,7 +1503,7 @@ async function showInfo(item) {
   container.innerHTML = `
     <div style="display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column; gap:20px;">
       <div class="loading"></div>
-      <div style="letter-spacing:2px; font-size:12px; color:#888;">FETCHING DETAILS...</div>
+      <div style="letter-spacing:2px; font-size:12px; color:#888;">FETCHING CINEMATIC DETAILS...</div>
     </div>
   `;
   overlay.classList.add('active');
@@ -1235,7 +1512,6 @@ async function showInfo(item) {
     let type = item.type || (STATE.contentType === 'tv' ? 'tv' : 'movie');
     let id = item.tmdb_id || item.imdb_id;
 
-    // If we only have an IMDB ID, we need to find the TMDB ID first
     if (id && id.toString().startsWith('tt')) {
       const findRes = await fetchTmdb(`https://api.themoviedb.org/3/find/${id}?external_source=imdb_id&language=en-US`);
       const findData = await findRes.json();
@@ -1250,26 +1526,23 @@ async function showInfo(item) {
     if (!res.ok) throw new Error(`TMDB Error: ${res.status}`);
     const data = await res.json();
     
-    // Set background
     const bgUrl = data.backdrop_path ? `https://image.tmdb.org/t/p/original${data.backdrop_path}` : '';
     container.style.setProperty('--bg-url', `url(${bgUrl})`);
     
-    const castData = data.credits?.cast?.slice(0, 6) || [];
+    const castData = data.credits?.cast?.slice(0, 8) || [];
     const castHtml = castData.length > 0 
-      ? castData.map(c => `<span onclick="openCastBrowser(${c.id}, '${c.name.replace(/'/g, "\\'")}')"
-          style="cursor:pointer; color:#ccc; text-decoration:underline; text-decoration-color:#444; text-underline-offset:3px; transition: color 0.2s;"
-          onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#ccc'">${c.name}</span>`).join(', ')
+      ? castData.map(c => `<span onclick="openCastBrowser(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="cast-link">${c.name}</span>`).join(', ')
       : 'N/A';
-    const genres = data.genres?.map(g => g.name).join(', ') || 'N/A';
+    
+    const genres = data.genres?.map(g => g.name).join(' • ') || 'N/A';
     const runtime = data.runtime ? `${data.runtime} min` : (data.episode_run_time && data.episode_run_time.length > 0 ? `${data.episode_run_time[0]} min` : '');
-    // Update item with any missing IDs from fetched details to ensure better matching
+    
     if (data.imdb_id && !item.imdb_id) item.imdb_id = data.imdb_id;
     if (data.id && !item.tmdb_id) item.tmdb_id = data.id;
 
     const itemJson = JSON.stringify(item).replace(/'/g, "\\'").replace(/"/g, "&quot;");
     const inWatchlist = STATE.watchlist.some(i => isSameItem(i, item));
 
-    // Content Rating
     let contentRating = '';
     if (type === 'movie' && data.release_dates?.results) {
       const us = data.release_dates.results.find(r => r.iso_3166_1 === 'US');
@@ -1282,43 +1555,54 @@ async function showInfo(item) {
 
     container.innerHTML = `
       <div class="info-content">
-        <img src="https://image.tmdb.org/t/p/w500${data.poster_path}" class="info-poster" onerror="this.src='https://placehold.co/300x450/1a1a2e/ffffff?text=No+Poster'">
+        <div class="info-poster-wrapper">
+          <img src="https://image.tmdb.org/t/p/w500${data.poster_path}" class="info-poster" onerror="this.src='https://placehold.co/300x450/1a1a2e/ffffff?text=No+Poster'">
+          ${data.tagline ? `<div class="info-tagline">"${data.tagline}"</div>` : ''}
+        </div>
         <div class="info-details">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-             <div class="badge" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:4px 12px; font-size:12px;">${type.toUpperCase()}</div>
-             <button class="close-btn" onclick="closeInfo()" style="padding:10px 20px;">BACK (ESC)</button>
+          <div class="info-header-row">
+             <div class="hero-tag" style="position:static; margin-bottom:0;">${type === 'tv' ? 'TV SERIES' : 'FEATURE FILM'}</div>
+             <button class="close-btn" onclick="closeInfo()">BACK (ESC)</button>
           </div>
-          <h2>${data.title || data.name}</h2>
+          
+          <h2 class="info-title-main">${data.title || data.name}</h2>
+          
           <div class="info-meta">
-            <span style="color:var(--accent); font-weight:bold;">${(data.release_date || data.first_air_date || '').split('-')[0]}</span>
-            <span class="rating">★ ${data.vote_average?.toFixed(1) || '0.0'}</span>
+            <span class="info-year">${(data.release_date || data.first_air_date || '').split('-')[0]}</span>
+            <span class="info-rating">★ ${data.vote_average?.toFixed(1) || '0.0'}</span>
             ${ratingBadge}
-            ${runtime ? `<span>${runtime}</span>` : ''}
-            <span>HD / 4K</span>
+            ${runtime ? `<span class="info-runtime">${runtime}</span>` : ''}
+            <span class="info-quality">ULTRA HD 4K</span>
           </div>
-          <div style="color:#888; font-size:14px; letter-spacing:1px; text-transform:uppercase;">${genres}</div>
+
+          <div class="info-genres">${genres}</div>
+          
           <p class="info-overview">${data.overview || 'No description available.'}</p>
-          <div style="font-size:16px; color:#aaa; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
-            <span style="color:#666;">Starring:</span> ${castHtml}
+          
+          <div class="info-cast">
+            <span style="color:var(--accent); font-weight:700; text-transform:uppercase; font-size:12px; letter-spacing:1px; margin-right:8px;">Starring:</span> 
+            ${castHtml}
           </div>
+
           <div class="info-actions">
             <button class="btn-primary" id="infoPlayBtn" onclick="closeInfo(); playItem(${itemJson})">
-              <span style="font-size:24px;">▶</span> WATCH NOW
+              <span class="play-icon">▶</span> WATCH NOW
             </button>
 
             <button class="btn-secondary" id="infoWatchlistBtn" onclick="toggleWatchlist(event, ${itemJson})">
-              ${inWatchlist ? '★ REMOVE' : '☆ WATCHLIST'}
+              ${inWatchlist ? '★ REMOVE FROM LIST' : '☆ ADD TO WATCHLIST'}
             </button>
           </div>
+
           <div class="similar-section" id="similarSection" style="display:none;">
-            <h3>You Might Also Like</h3>
+            <h3>RECOMMENDED FOR YOU</h3>
             <div class="similar-row" id="similarRow"></div>
           </div>
         </div>
       </div>
     `;
 
-    // Populate Similar Movies
+    // Populate Similar
     const similarResults = data.similar?.results || [];
     if (similarResults.length > 0) {
       const similarSection = document.getElementById('similarSection');
@@ -1343,10 +1627,6 @@ async function showInfo(item) {
       }).join('');
     }
 
-
-
-    
-    // Auto-focus Play button for TV
     setTimeout(() => {
       const playBtn = document.getElementById('infoPlayBtn');
       if (playBtn) playBtn.focus();
@@ -1355,15 +1635,16 @@ async function showInfo(item) {
   } catch (err) {
     console.error("Info Fetch Error:", err);
     container.innerHTML = `
-      <div style="padding:60px; text-align:center;">
-        <h2 style="margin-bottom:20px;">Failed to load details</h2>
-        <p style="color:#888; margin-bottom:10px;">${err.message}</p>
-        <p style="color:#555; margin-bottom:30px; font-size:12px;">This content might not be available in our database yet or your internet is blocked.</p>
-        <button class="btn-primary" onclick="closeInfo()" style="margin:0 auto;">GO BACK</button>
+      <div style="padding:60px; text-align:center; background:rgba(0,0,0,0.8); height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <div style="font-size:64px; margin-bottom:20px;">🎬</div>
+        <h2 style="margin-bottom:12px; font-size:32px;">Details Unavailable</h2>
+        <p style="color:#888; max-width:500px; margin-bottom:30px; line-height:1.6;">We encountered an error while fetching the cinematic metadata for this title. Please try again or check your connection.</p>
+        <button class="btn-primary" onclick="closeInfo()" style="padding:15px 40px;">RETURN TO BROWSE</button>
       </div>
     `;
   }
 }
+
 
 
 function closeInfo() {
@@ -1782,10 +2063,7 @@ function closePlayer() {
 
   document.getElementById('closePlayerBtn').textContent = 'Close';
   
-  // If we weren't in an info screen, show the header/tabs again
-  if (!STATE.wasInfoOpen) {
-    document.body.classList.remove('playing');
-  }
+  document.body.classList.remove('playing');
 
   // Restore UI elements for next time
   switchBtn.style.display = 'block';
@@ -1892,7 +2170,11 @@ function switchTab(type) {
   }
 
   document.querySelectorAll('.tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.type === type);
+    const isActive = t.dataset.type === type;
+    t.classList.toggle('active', isActive);
+    if (isActive) {
+      t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
   });
   
   if (type === 'watchlist') {
@@ -1990,6 +2272,11 @@ function focusFirstTab() {
 }
 
 function focusFirstCard() {
+  const heroBtn = document.querySelector('.hero-banner .btn-primary');
+  if (heroBtn && document.getElementById('heroBanner').classList.contains('active')) {
+    heroBtn.focus();
+    return true;
+  }
   const subFilters = document.getElementById('subFilters');
   if (subFilters && subFilters.style.display !== 'none') {
     const firstFilter = subFilters.querySelector('.filter-btn');
@@ -2011,6 +2298,13 @@ function focusHeaderElement() {
 
 // Initialize focus on load
 window.addEventListener('DOMContentLoaded', () => {
+  // Tab scrolling on focus
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('focus', () => {
+      t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+  });
+
   setTimeout(() => {
     focusFirstTab();
   }, 1000);
@@ -2043,11 +2337,21 @@ window.addEventListener('keydown', (e) => {
       focusFirstTab();
     } else if (zone === 'tabs') {
       e.preventDefault();
-      focusFirstCard(); // This now checks sub-filters first
+      focusFirstCard(); // Now includes Hero Banner
     } else if (zone === 'subfilters') {
       e.preventDefault();
       const firstCard = document.querySelector('.grid .card');
       if (firstCard) firstCard.focus();
+    } else if (active.closest('.hero-banner')) {
+      e.preventDefault();
+      const subFilters = document.getElementById('subFilters');
+      if (subFilters && subFilters.style.display !== 'none') {
+        const firstFilter = subFilters.querySelector('.filter-btn');
+        if (firstFilter) firstFilter.focus();
+      } else {
+        const firstCard = document.querySelector('.grid .card');
+        if (firstCard) firstCard.focus();
+      }
     }
   }
 
@@ -2328,7 +2632,7 @@ setTimeout(dismissSplash, 3500);
 // ─── CHANGELOG / WHAT'S NEW ──────────────────────────────
 // ═══════════════════════════════════════════════════════════
 
-const APP_VERSION = 'v1.6.4';
+const APP_VERSION = 'v1.6.5';
 
 function showChangelog() {
   document.getElementById('changelogOverlay').classList.add('active');
@@ -2440,17 +2744,23 @@ async function renderHeroBanner() {
     hero.innerHTML = `
       <div class="hero-bg" style="background-image: url(https://image.tmdb.org/t/p/original${item.backdrop_path})"></div>
       <div class="hero-content">
-        <div class="badge" style="margin-bottom:12px; background:var(--accent);">${type.toUpperCase()} SPOTLIGHT</div>
+        <div class="hero-tag">TRENDING NOW</div>
+        <div class="badge" style="margin-bottom:12px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(4px); font-size:10px;">${type === 'tv' ? 'TV SERIES' : 'MOVIE'} SPOTLIGHT</div>
         <h2 class="hero-title">${item.title || item.name}</h2>
         <div class="hero-meta">
           <span style="color:var(--accent); font-weight:bold;">★ ${item.vote_average.toFixed(1)}</span>
           <span>${fullItem.year}</span>
-          <span>HD / 4K</span>
+          <span class="quality-badge">4K ULTRA HD</span>
+          <span class="quality-badge">HDR10+</span>
         </div>
         <p class="hero-desc">${item.overview}</p>
         <div class="hero-actions">
-          <button class="btn-primary" onclick="playItem(${itemJson})" tabindex="0">▶ WATCH NOW</button>
-          <button class="btn-secondary" onclick="showInfo(${itemJson})" tabindex="0">ℹ MORE INFO</button>
+          <button class="btn-primary" onclick="playItem(${itemJson})" tabindex="0">
+            <span style="margin-right:8px;">▶</span> PLAY NOW
+          </button>
+          <button class="btn-secondary" onclick="showInfo(${itemJson})" tabindex="0">
+            <span style="margin-right:8px;">ℹ</span> DETAILS
+          </button>
         </div>
       </div>
     `;
