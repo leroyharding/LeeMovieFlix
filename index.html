@@ -471,16 +471,15 @@
   </div>
 </div>
 
-<!-- ─── TABS ─── -->
-<div class="tabs">
-  <button class="tab active" data-type="movies" onclick="switchTab('movies')">Movies</button>
-  <button class="tab" data-type="tv" onclick="switchTab('tv')">TV Shows</button>
-  <button class="tab" data-type="trending" onclick="switchTab('trending')">Trending</button>
+<div class="tabs" tabindex="-1">
+  <button class="tab active" data-type="movies" onclick="switchTab('movies')" tabindex="0">Movies</button>
+  <button class="tab" data-type="tv" onclick="switchTab('tv')" tabindex="0">TV Shows</button>
+  <button class="tab" data-type="trending" onclick="switchTab('trending')" tabindex="0">Trending</button>
 
-  <button class="tab" data-type="watchlist" onclick="switchTab('watchlist')">Watchlist</button>
-  <button class="tab" data-type="collections" onclick="switchTab('collections')">Collections</button>
-  <button class="tab" data-type="history" onclick="switchTab('history')">History</button>
-  <button class="random-pick-btn" onclick="randomPick()" title="Random Pick" style="margin-left:auto; margin-right:12px;">
+  <button class="tab" data-type="watchlist" onclick="switchTab('watchlist')" tabindex="0">Watchlist</button>
+  <button class="tab" data-type="collections" onclick="switchTab('collections')" tabindex="0">Collections</button>
+  <button class="tab" data-type="history" onclick="switchTab('history')" tabindex="0">History</button>
+  <button class="random-pick-btn" onclick="randomPick()" title="Random Pick" style="margin-left:auto; margin-right:12px;" tabindex="0">
     <span>🎲</span> I'm Feeling Lucky
   </button>
 </div>
@@ -1998,16 +1997,27 @@ function focusFirstCard() {
 
 function focusHeaderElement() {
   const searchInput = document.getElementById('searchInput');
-  if (searchInput) { searchInput.focus(); return true; }
+  if (searchInput) {
+    searchInput.focus();
+    return true;
+  }
   return false;
 }
+
+// Initialize focus on load
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    focusFirstTab();
+  }, 1000);
+});
 
 window.addEventListener('keydown', (e) => {
   const active = document.activeElement;
   const zone = getFocusZone(active);
+  const key = e.key;
 
-  // ─── ESCAPE ───
-  if (e.key === 'Escape' || e.key === 'GoBack') {
+  // ─── ESCAPE / BACK ───
+  if (key === 'Escape' || key === 'GoBack' || key === 'Back' || e.keyCode === 27 || e.keyCode === 4) {
     if (document.getElementById('castBrowser').classList.contains('active')) {
       closeCastBrowser(); e.preventDefault();
     } else if (document.getElementById('playerOverlay').classList.contains('active')) {
@@ -2022,46 +2032,44 @@ window.addEventListener('keydown', (e) => {
   if (zone === 'info' || zone === 'player' || zone === 'cast') return;
 
   // ─── ARROW DOWN ───
-  if (e.key === 'ArrowDown') {
+  if (key === 'ArrowDown' || e.keyCode === 40) {
     if (zone === 'header') {
-      // Header → Tabs
       e.preventDefault();
       focusFirstTab();
     } else if (zone === 'tabs') {
-      // Tabs → Content grid
       e.preventDefault();
       focusFirstCard();
     }
-    // In content zone, let default spatial nav handle it
   }
 
   // ─── ARROW UP ───
-  if (e.key === 'ArrowUp') {
+  if (key === 'ArrowUp' || e.keyCode === 38) {
     if (zone === 'content') {
-      // Check if we're on the first row of cards
       const cards = Array.from(document.querySelectorAll('.grid .card'));
       const idx = cards.indexOf(active);
-      // If first row (rough check: index < ~6 columns) or a filter/pagination button
       if (idx >= 0 && idx < 8 || active?.closest('.sub-filters') || active?.closest('.pagination')) {
         e.preventDefault();
         focusFirstTab();
       }
     } else if (zone === 'tabs') {
-      // Tabs → Header
       e.preventDefault();
       focusHeaderElement();
     }
   }
 
-  // ─── LEFT/RIGHT in TABS ───
-  if (zone === 'tabs' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
-    const tabs = Array.from(document.querySelectorAll('.tabs button'));
-    const currentIdx = tabs.indexOf(active);
-    if (currentIdx >= 0) {
-      let nextIdx = e.key === 'ArrowRight' ? currentIdx + 1 : currentIdx - 1;
-      if (nextIdx >= 0 && nextIdx < tabs.length) {
-        e.preventDefault();
-        tabs[nextIdx].focus();
+  // ─── ARROW LEFT/RIGHT ───
+  if (key === 'ArrowLeft' || e.keyCode === 37 || key === 'ArrowRight' || e.keyCode === 39) {
+    if (zone === 'tabs') {
+      const tabs = Array.from(document.querySelectorAll('.tabs button'));
+      const currentIdx = tabs.indexOf(active);
+      if (currentIdx >= 0) {
+        let nextIdx = (key === 'ArrowRight' || e.keyCode === 39) ? currentIdx + 1 : currentIdx - 1;
+        if (nextIdx >= 0 && nextIdx < tabs.length) {
+          e.preventDefault();
+          tabs[nextIdx].focus();
+          // Ensure it's scrolled into view if container overflows
+          tabs[nextIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
       }
     }
   }
