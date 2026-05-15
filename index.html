@@ -435,12 +435,12 @@
 <div class="changelog-overlay" id="changelogOverlay">
   <div class="changelog-box">
     <h2>What's New 🎬</h2>
-    <div class="version-tag">v1.6.2</div>
+    <div class="version-tag">v1.6.3</div>
     <ul>
+      <li><strong>Firestick Display Fix</strong> — Resolved the "white screen" issue on Firestick devices by implementing a dark native theme and transparent WebView background.</li>
       <li><strong>Watchlist Stability</strong> — Fixed a major issue where movie posters appeared way too big on the watchlist and history pages.</li>
-      <li><strong>Grid Layout Optimization</strong> — Reduced poster sizes across the entire app for a cleaner, more professional look with higher information density.</li>
-      <li><strong>Improved Watchlist Logic</strong> — Enhanced item matching and added visual "★" indicators for saved movies.</li>
-      <li><strong>Horizontal Rows</strong> — Standardized scrolling row card widths and image scaling.</li>
+      <li><strong>Grid Layout Optimization</strong> — Reduced poster sizes across the entire app for a cleaner, more professional look.</li>
+      <li><strong>Navigation Overhaul</strong> — Full D-pad support for sub-filters and dynamic tabs.</li>
     </ul>
     <button class="changelog-dismiss" onclick="dismissChangelog()" autofocus>Got It!</button>
   </div>
@@ -458,7 +458,7 @@
 <!-- ─── HEADER ─── -->
 <div class="header">
   <div class="header-left">
-    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.6.2</span></h1>
+    <h1 id="appTitle" style="color:var(--accent);">LeeMovieFlix <span style="font-size: 14px; opacity: 1; color: #fff; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-weight: normal; margin-left: 12px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.2);">v1.6.3</span></h1>
   </div>
   <div class="header-right">
     <div class="search-box">
@@ -498,7 +498,7 @@
   </div>
   <footer style="margin-top: 80px; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; color: #555; font-size: 13px; letter-spacing: 1px;">
     <p>© 2026 LeeMovieFlix · Designed & Developed by <span style="color: var(--accent); font-weight: bold; text-transform: uppercase;">TheTechGuy</span></p>
-    <p style="margin-top: 12px; font-size: 11px; opacity: 0.5;">Premium Cinematic Experience v1.6.2 · All Rights Reserved</p>
+    <p style="margin-top: 12px; font-size: 11px; opacity: 0.5;">Premium Cinematic Experience v1.6.3 · All Rights Reserved</p>
   </footer>
   <div id="loadingIndicator" class="loading" style="display:none;">Loading...</div>
 </div>
@@ -2327,7 +2327,7 @@ setTimeout(dismissSplash, 3500);
 // ─── CHANGELOG / WHAT'S NEW ──────────────────────────────
 // ═══════════════════════════════════════════════════════════
 
-const APP_VERSION = 'v1.6.2';
+const APP_VERSION = 'v1.6.3';
 
 function showChangelog() {
   document.getElementById('changelogOverlay').classList.add('active');
